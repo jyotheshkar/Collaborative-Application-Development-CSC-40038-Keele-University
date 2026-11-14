@@ -1,0 +1,56 @@
+{
+  "module_code": "CSC-40038",
+  "academic_year": "2023/24",
+  "project_year": 2024,
+  "maintenance_date": "2026-11-14",
+  "module_mark": 77,
+  "credits_cats": 15,
+  "mark_evidence": "Private official transcript visually verified, issued 15 January 2025; not uploaded. Overall module mark, not a component mark or model score.",
+  "official_module_url": "https://www.keele.ac.uk/catalogue/2023-24/csc-40038.htm",
+  "official_documents": [
+    {
+      "classification": "university_assessment_brief",
+      "public_path": "docs/original/CSC-40038-2024-Coursework-1-personal-reflection.pdf",
+      "sha256": "e7e4fc06096ed7b4d592fd6ebd5db139ac64c20ba0f318bfaecd2134fc00d912",
+      "unchanged": true
+    }
+  ],
+  "student_documents": [
+    {
+      "classification": "student_submission_private_source",
+      "source_description": "group report DOCX",
+      "source_sha256": "2080619b161dd45f10805131946a762503d7195e412d23230c2d7b4c7129467e",
+      "public_derivative": "docs/original/group-coursework-technical-text.md",
+      "derivative_sha256": "bab9c91fd9e3b66cd73243fcd0d94af6a946cf7a331408fc5ea67090c403517e",
+      "complete_submission": false,
+      "exclusions": [
+        "cover",
+        "student identifiers",
+        "source document metadata",
+        "all embedded images",
+        "colleague names"
+      ],
+      "derivative_created": "2026-11-14"
+    },
+    {
+      "classification": "student_submission_private_source",
+      "source_description": "personal reflection DOCX",
+      "source_sha256": "4f41c47ead4140a925adb2ff38c1945e51361ff668c8d21f0ae086d78e76cb10",
+      "public_derivative": "docs/original/personal-contribution-excerpt.md",
+      "derivative_sha256": "54d517e62b2d988522e2febfc5cac87dbd0153c47f2ad2dcf8773cf8714f45ba",
+      "complete_submission": false,
+      "exclusions": [
+        "cover",
+        "student identifiers",
+        "source document metadata",
+        "all embedded images",
+        "colleague names",
+        "private peer assessments",
+        "interpersonal comments",
+        "non-descriptive reflection sections"
+      ],
+      "derivative_created": "2026-11-14"
+    }
+  ],
+  "history_limit": "Redacted derivatives do not remove unredacted versions from Git history. Original-work import bytes remain untouched."
+}
