@@ -1,71 +1,46 @@
-# Engineering review — Collaborative Application Development
+# Engineering and reproducibility notes
 
-Review date: 14 November 2026. This document records the current portfolio edition and proposed engineering improvements separately from the assessed academic work.
+## Implemented components
 
-## Original system
-
-Explore conference booking patterns, compare prediction approaches and communicate results through a graphical application. The original delivery is **Python analytics + desktop GUI**. Existing source files, desktop interfaces and relational/data schemas remain authoritative for reproducing the historical implementation.
+The desktop prototype has three main boundaries. `GUI.py` handles input and presentation. `DataPrep.py` loads the event files and builds day/week aggregates by audience. `FinalModel.py` fits ElasticNet models and calculates forecasts, while `FutureWorkPrediction.py` explores attendance classification. Training runs in the local process when requested; there is no server, database service, persistent model registry or installed application package.
 
 ```mermaid
 flowchart TD
-  N0["Conference CSV files"]
-  N1["Cleaning and imputation"]
-  N2["Forecast and classification models"]
-  N3["Prediction GUI"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
+    CSV["Seven event files"] --> Prep["Date and audience preparation"]
+    Prep --> Forecast["Booking forecast"]
+    Imputed["Imputed event files"] --> Attendance["Attendance classifier"]
+    Form["Tkinter form"] --> Forecast
+    Form --> Attendance
+    Forecast --> Result["Local results"]
+    Attendance --> Result
 ```
 
-## Decision 1: Preserve provenance
+## Environment and outputs
 
-Keep the assessed source and any group contribution boundaries intact. Add a browser workbench and engineering explanation as a later portfolio edition. Do not relabel the new edition with the original module mark or overwrite the academic evidence. Tradeoff: two surfaces require explicit documentation, but reviewers can distinguish reproducible source from demonstrations.
+The maintained preparation/forecast path uses the versions bounded in `requirements-maintenance.txt`: pandas, NumPy and scikit-learn. Tkinter is provided by the Python installation. The original exploratory analysis additionally imports matplotlib, SciPy and XlsxWriter. Install those separately only when running that analysis:
 
-## Decision 2: Make the boundary explicit
-
-Preserve the separate analysis, imputation and modelling components. Data preparation must be fitted within each training fold so future observations cannot influence past predictions.
-
-A desktop interface supports the original local analysis workflow. A browser edition improves discoverability, while executing the original fitted models would require a separately secured Python service.
-
-## Data and interface contracts
-
-Input contracts should name event identifier, booking-created date and observation cutoff. Split by event and time, account for zero-booking weeks, and track the provenance of every imputed value.
-
-The browser workbench uses seven invented weekly counts and descriptive z-scores. It does not run the original regression/classification models or measure their performance.
-
-## Current web architecture
-
-The web edition is buildless HTML, CSS and JavaScript. It loads a fixed, synthetic example where needed and performs bounded calculations in the browser. User-entered strings are rendered through text nodes; no submitted value is evaluated as source code. It has no analytics, external API calls, database writes or credential requirement. Input state lasts only for the current page session.
-
-```mermaid
-flowchart TD
-  A["Visitor browser"] --> B["Static HTML and styles"]
-  B --> C["Validated local input"]
-  C --> D["Deterministic demonstration"]
-  D --> E["Result and explicit limitations"]
-  B --> F["Original source and evidence links"]
+```bash
+python -m pip install matplotlib scipy XlsxWriter
 ```
 
-## Deployment architecture
+`Data Analysis/dataAnalysis.py` retains its historical absolute CSV path at the end of the file. Change that assignment to a local copy of an event CSV before running it. It writes `Images/<event>.png` and `reports/datareport_<event>.xlsx` beside that input and displays a plot. Keep outputs separate from original evidence. Other experiment scripts have independent assumptions and are not all covered by the maintained GUI dependency list.
 
-Local preview uses a static HTTP server. The intended Sites deployment serves the same `web/index.html` and associated assets. As of this review, Sites publication is pending; the source repository link is not a deployment receipt. A Python/PHP/desktop runtime is not silently hosted by deploying this static page.
+## Data contracts and bounded maintenance
 
-A future hosted original application needs a separately described service boundary: authenticated request handling; schema validation; configuration and secret management; bounded workloads; persistent storage ownership; structured errors; audit-safe logs; backup/restore; deployment rollback; and explicit operational responsibility. For training jobs, use a queue and durable job status rather than keeping an HTTP request open. These are proposed requirements, not implemented services.
+The event CSV format has a title row before the header. The explicit file/date manifest must remain aligned: do not replace it with directory enumeration. Dates are day-first in the source. Historical booking records on or after the event date are excluded from the maintained preparation. The seven imputed filenames are case-sensitive on Linux.
 
-## Verification strategy
+Earlier maintenance fixed preparation paths and event ordering. The November 2026 quality update resolves attendance inputs beside `FutureWorkPrediction.py` using the exact committed filename case; it preserves the historical classifier and its predictions. No archive import or scientific method is silently rewritten.
 
-1. Review links and academic figures against the verified module map.
-2. Validate browser inputs at their boundary: blanks, malformed values, out-of-range numbers and non-finite values.
-3. Compare numerical examples against independent known answers; keep labels clear about synthetic data.
-4. Check keyboard navigation, visible focus, readable contrast and small-screen layout.
-5. Run the original repository’s documented checks separately. A successful browser demonstration does not prove that the historical GUI, hardware integration or modelling environment starts successfully.
+## Checks actually performed
 
-The edition uses semantic headings, labelled form controls, a live result region, responsive layout and reduced-motion support. Browser execution and original-application checks must be reported only when actually completed.
+`python -m unittest discover -s tests -v` runs the existing preparation regression. It imports preparation from an unrelated working directory and checks all seven datasets, event-date pairing, datetime preservation, prepared post-event exclusion and finite aggregate data. This passed locally on 14 November 2026 with the bundled Python 3.12/pandas runtime. That runtime lacked scikit-learn, and network package installation failed; model training, attendance classification and the interactive GUI were not executed in this review. The configured CI installs the declared dependencies and runs the preparation regression, but a future CI result must be checked separately.
 
-## Operations and failure handling
+## Design decisions for further work
 
-Keep real datasets, academic identifiers, access tokens and session exports outside the published source. A malformed workbench input produces an explanatory local error. The demo state can be reset by reloading. Static deployment rollback should restore a previously saved, verified version. Before deploying an original backend, define recovery objectives based on the actual users and data rather than inventing uptime guarantees.
+Before packaging a desktop release, separate import-time CSV loading and model fitting from the UI, report recoverable errors in the UI, and cache a fitted model by dataset hash and settings. Keep the current archive intact while adding a maintained package in a separate directory. A worker thread or process can prevent training from blocking Tkinter; only the UI thread should update widgets.
 
-## Known limitations
+Evaluation should hold out entire events and future time periods, fit imputation on training data, document missing-date policy and compare a simple baseline. Record MAE by event and audience and preserve input hashes. Advertising should remain a descriptive proxy unless independent campaign data supports causal analysis. Measure training latency before introducing services or queues; the current project does not need distributed infrastructure to be understandable.
 
-The browser workbench uses seven invented weekly counts and descriptive z-scores. It does not run the original regression/classification models or measure their performance. Missing university-issued documents remain marked missing. No unavailable assessment component marks, model scores, benchmarks or production claims have been inferred from the final module result.
+## Evidence and privacy
+
+See `docs/original/README.md` and `PROVENANCE.json` for source and derivative hashes. Public text derivatives omit source document metadata, figures and student identifiers. The professional-contribution excerpt also excludes private peer assessments. Removing an unredacted file from the current branch does not remove earlier Git versions; repository visibility and any history rewrite are separate publication decisions.

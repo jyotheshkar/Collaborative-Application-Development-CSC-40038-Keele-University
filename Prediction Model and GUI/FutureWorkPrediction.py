@@ -1,15 +1,17 @@
 import pandas as pd
+from pathlib import Path
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
 # Read the CSV file into a pandas DataFrame
-d19 = pd.read_csv('D19_imputed.csv', header=1)
-d21 = pd.read_csv('D21_imputed.csv', header=1)
-gp21 = pd.read_csv('GP21_imputed.csv', header=1)
-mse21 = pd.read_csv('MSE21_imputed.csv', header=1)
-np21 = pd.read_csv('NP21_imputed.csv', header=1)
-srm22 = pd.read_csv('SRM22_imputed.csv', header=1)
-srm23 = pd.read_csv('SRM23_imputed.csv', header=1)
+DATA_DIRECTORY = Path(__file__).resolve().parent
+d19 = pd.read_csv(DATA_DIRECTORY / 'D19_Imputed.csv', header=1)
+d21 = pd.read_csv(DATA_DIRECTORY / 'D21_Imputed.csv', header=1)
+gp21 = pd.read_csv(DATA_DIRECTORY / 'GP21_Imputed.csv', header=1)
+mse21 = pd.read_csv(DATA_DIRECTORY / 'MSE21_Imputed.csv', header=1)
+np21 = pd.read_csv(DATA_DIRECTORY / 'NP21_Imputed.csv', header=1)
+srm22 = pd.read_csv(DATA_DIRECTORY / 'SRM22_Imputed.csv', header=1)
+srm23 = pd.read_csv(DATA_DIRECTORY / 'SRM23_Imputed.csv', header=1)
 
 """Add Event Dates to a List"""
 event_dates = ["19/11/2019", "09/12/2021", "22/04/2021", "24/03/2021", "09/11/2021", "15/06/2022", "08/06/2023"]
@@ -75,3 +77,4 @@ def audience_pred(targetAudience):
     # print(f"Total Predicted Attendance Percentage of Forecasted Registrations: {attendance_percentage:.2f}%")
 
     #This percentage and actual number would have been printed on to the frontend
+
